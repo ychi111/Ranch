@@ -179,3 +179,8 @@ for ($i=0;$i<40;$i++) {
 for ($i=0;$i<10;$i++) {
     $myFarm->addAnimal(new Cow()); //и коров
 }
+
+$myFarm->collectProducts(); //собираем продукты
+
+echo 'Молока надоено '.$myFarm->returnMilk().'<br>'; //выводим результат сбора
+echo 'Яиц собрано '.$myFarm->returnEggs().'<br>';
