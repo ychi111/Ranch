@@ -13,6 +13,13 @@ interface CanGiveEggs {
 }
 
 class Cow implements Animal, CanGiveMilk {
+
+    public $id;
+    public function __construct()
+    {
+        $this->id = substr(md5(rand()), 0, 6); //получаем случаный id длинною в 6 символов
+    }
+
     public function getMilk(): int
     {
         return rand(8, 12); //выдает 8-12 литров молока
@@ -20,6 +27,13 @@ class Cow implements Animal, CanGiveMilk {
 }
 
 class Hen implements Animal, CanGiveEggs {
+
+    public $id;
+    public function __construct()
+    {
+        $this->id = substr(md5(rand()), 0, 6); //получаем случаный id длинною в 6 символов
+    }
+
     public function getEggs(): int
     {
         return rand(0, 1); //выдает 0-1 яичек
@@ -104,7 +118,7 @@ class Barn implements Storage { //амбар
 
     public function howMuchEggs(): int
     {
-        return $this->egssCount;
+        return $this->eggsCount;
     }
 }
 
@@ -119,4 +133,49 @@ class Farm { //класс фермы
         $this->name = $name;
         $this->storage = $storage;
     }
+
+    public function returnMilk()
+    {
+        return $this->storage->howMuchMilk();
+
+    }
+
+    public function returnEggs()
+    {
+        return $this->storage->howMuchEggs();
+
+    }
+
+    public function addAnimal(Animal $animal)
+    {
+        $this->animals[] = $animal; //добавляем животное в массив
+    }
+
+    public function collectProducts() //сбор продукции
+    {
+        foreach ($this->animals as $animal)
+        {
+            if ($animal instanceOf CanGiveMilk) { //если относится к молокодающим, то сбор молока
+                $milkLiters = $animal->getMilk();
+                $this->storage->addMilk($milkLiters);
+            }
+
+            if ($animal instanceOf CanGiveEggs) { //с яйценесущих яйца
+                $eggsCount = $animal->getEggs();
+                $this->storage->addEggs($eggsCount);
+            }
+        }
+    }
+}
+
+$barn = new Barn($milkLimit = 300, $eggsLimit = 500); //создаем амбар вместимостью 300 литров молока и 500 яичек
+
+$myFarm = new Farm('MyFirstFarm', $barn);
+
+for ($i=0;$i<40;$i++) {
+    $myFarm->addAnimal(new Hen()); //сажаем в ферму курочек
+}
+
+for ($i=0;$i<10;$i++) {
+    $myFarm->addAnimal(new Cow()); //и коров
 }
