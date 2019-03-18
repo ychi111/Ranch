@@ -107,3 +107,16 @@ class Barn implements Storage { //амбар
         return $this->egssCount;
     }
 }
+
+class Farm { //класс фермы
+
+    private $name;
+    private $storage;
+    private $animals = [];
+
+    public function __construct(string $name, Storage $storage)
+    {
+        $this->name = $name;
+        $this->storage = $storage;
+    }
+}
